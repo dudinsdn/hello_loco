@@ -47,21 +47,28 @@ impl Hooks for App {
 
     fn routes(_ctx: &AppContext) -> AppRoutes {
         AppRoutes::with_default_routes() // controller routes below
+            .add_route(controllers::comments::routes())
             .add_route(controllers::posts::routes())
             .add_route(controllers::auth::routes())
     }
     async fn connect_workers(ctx: &AppContext, queue: &Queue) -> Result<()> {
+        queue
+            .register(crate::workers::notifier::Worker::build(ctx))
+            .await?;
         queue.register(DownloadWorker::build(ctx)).await?;
         Ok(())
     }
 
     #[allow(unused_variables)]
     fn register_tasks(tasks: &mut Tasks) {
+        tasks.register(tasks::posts_report::PostsReport);
         // tasks-inject (do not remove)
         tasks.register(tasks::user_create::UserCreate);
         tasks.register(tasks::user_delete::UserDelete);
     }
     async fn truncate(ctx: &AppContext) -> Result<()> {
+        truncate_table(&ctx.db, crate::models::comments::Entity).await?;
+        truncate_table(&ctx.db, crate::models::posts::Entity).await?;
         truncate_table(&ctx.db, users::Entity).await?;
         Ok(())
     }

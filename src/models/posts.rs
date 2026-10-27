@@ -19,7 +19,26 @@ impl ActiveModelBehavior for ActiveModel {
 }
 
 // implement your read-oriented logic here
-impl Model {}
+impl Model {
+    pub async fn comments(
+        &self,
+        db: &DatabaseConnection,
+    ) -> Result<Vec<super::comments::Model>, DbErr> {
+        use sea_orm::QueryOrder;
+        self.find_related(super::comments::Entity)
+            .order_by_asc(super::_entities::comments::Column::Id)
+            .all(db)
+            .await
+    }
+
+    pub async fn report(db: &DatabaseConnection) -> Result<Vec<Self>, DbErr> {
+        use sea_orm::QueryOrder;
+        Entity::find()
+            .order_by_asc(super::_entities::posts::Column::Id)
+            .all(db)
+            .await
+    }
+}
 
 // implement your write-oriented logic here
 impl ActiveModel {}

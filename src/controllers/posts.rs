@@ -52,6 +52,11 @@ async fn create(State(ctx): State<AppContext>, Json(params): Json<CreatePost>) -
         ..Default::default()
     };
     let item = item.insert(&ctx.db).await?;
+    crate::workers::notifier::Worker::perform_later(
+        &ctx,
+        crate::workers::notifier::WorkerArgs { post_id: item.id },
+    )
+    .await?;
 
     Ok((StatusCode::CREATED, Json(PostDto::from(item))).into_response())
 }
@@ -85,6 +90,20 @@ async fn remove(State(ctx): State<AppContext>, Path(id): Path<i64>) -> Result<Re
     Ok(StatusCode::NO_CONTENT.into_response())
 }
 
+#[debug_handler]
+async fn comments_for_post(State(ctx): State<AppContext>, Path(id): Path<i64>) -> Result<Response> {
+    let Some(model) = Entity::find_by_id(id).one(&ctx.db).await? else {
+        return Ok(not_found("post not found"));
+    };
+    let comments = model.comments(&ctx.db).await?;
+    format::json(
+        comments
+            .into_iter()
+            .map(crate::views::comments::CommentResponse::from)
+            .collect::<Vec<_>>(),
+    )
+}
+
 pub fn routes() -> Routes {
     Routes::new()
         .prefix("/api/posts")
@@ -93,4 +112,5 @@ pub fn routes() -> Routes {
         .add("/{id}", get(get_one))
         .add("/{id}", put(update))
         .add("/{id}", delete(remove))
+        .add("/{id}/comments", get(comments_for_post))
 }
