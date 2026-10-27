@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Halaman awal aplikasi Hello Loco.">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/app.css">
+  </head>
+  <body>
+    <div class="page">
+      <header><a class="brand" href="/">hello<span>_loco</span></a><nav aria-label="Navigasi utama"><a href="/login">Masuk</a><a href="/register">Daftar</a></nav></header>
+      <main>{% block content %}{% endblock content %}</main>
+      <footer><span>Dibangun dengan Rust &amp; Loco.</span><a href="https://loco.rs/docs/">Dokumentasi Loco <span aria-hidden="true">↗</span></a></footer>
+    </div>
+  </body>
+</html>

@@ -88,3 +88,52 @@ impl AuthMailer {
         Ok(())
     }
 }
+
+/// A sample rendering of the same source templates used for outgoing mail.
+#[derive(serde::Serialize)]
+pub struct EmailPreview {
+    pub subject: String,
+    pub html: String,
+    pub text: String,
+    pub subject_source: &'static str,
+    pub html_source: &'static str,
+    pub text_source: &'static str,
+}
+
+impl AuthMailer {
+    pub fn preview(kind: &str) -> Result<Option<EmailPreview>> {
+        let (subject_source, html_source, text_source) = match kind {
+            "welcome" => (
+                include_str!("auth/welcome/subject.t"),
+                include_str!("auth/welcome/html.t"),
+                include_str!("auth/welcome/text.t"),
+            ),
+            "forgot" => (
+                include_str!("auth/forgot/subject.t"),
+                include_str!("auth/forgot/html.t"),
+                include_str!("auth/forgot/text.t"),
+            ),
+            "magic_link" => (
+                include_str!("auth/magic_link/subject.t"),
+                include_str!("auth/magic_link/html.t"),
+                include_str!("auth/magic_link/text.t"),
+            ),
+            _ => return Ok(None),
+        };
+        let locals = json!({
+            "name": "Rani",
+            "host": "https://example.invalid",
+            "verifyToken": "contoh-verifikasi",
+            "resetToken": "contoh-reset",
+            "token": "contoh-magic-link",
+        });
+        Ok(Some(EmailPreview {
+            subject: loco_rs::controller::views::template(subject_source, locals.clone())?,
+            html: loco_rs::controller::views::template(html_source, locals.clone())?,
+            text: loco_rs::controller::views::template(text_source, locals)?,
+            subject_source,
+            html_source,
+            text_source,
+        }))
+    }
+}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="account-layout">
+  <div class="account-intro">
+    <p class="eyebrow"><span class="dot"></span> HELLO, LOCO.</p>
+    <h1>{% if register %}Mulai dari sini.{% else %}Senang melihat<br>Anda kembali.{% endif %}</h1>
+    <p class="description">{% if register %}Buat akun untuk mencoba aplikasi Anda.{% else %}Masuk dengan akun yang sudah Anda buat.<br>Belum punya akun? <a href="/register">Daftar dulu</a>.{% endif %}</p>
+    <a class="back-link" href="/">← Kembali ke beranda</a>
+  </div>
+  <div class="account-card">
+    <form id="account-form" data-mode="{% if register %}register{% else %}login{% endif %}">
+      <h2>{% if register %}Buat akun{% else %}Masuk ke akun{% endif %}</h2>
+      {% if register %}<label for="name">Nama</label><input id="name" name="name" autocomplete="name" required maxlength="200">{% endif %}
+      <label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="nama@contoh.com" required>
+      <label for="password">Kata sandi</label><input id="password" name="password" type="password" autocomplete="{% if register %}new-password{% else %}current-password{% endif %}" required>
+      <button class="button" type="submit">{% if register %}Daftar{% else %}Masuk{% endif %} <span aria-hidden="true">→</span></button>
+      <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      <noscript><p>Aktifkan JavaScript untuk menggunakan formulir ini.</p></noscript>
+      {% if register %}<p class="description small">Sudah punya akun? <a href="/login">Masuk</a>.</p>{% endif %}
+    </form>
+    <section id="signed-in" hidden aria-labelledby="signed-in-title">
+      <p class="eyebrow">BERHASIL MASUK</p><h2 id="signed-in-title">Selamat datang.</h2>
+      <p id="user-name" class="user-name"></p><p id="user-email" class="description"></p>
+      <button id="logout" class="button" type="button">Keluar</button>
+    </section>
+  </div>
+</section>
+<script src="/static/account.js" defer></script>
+{% endblock content %}

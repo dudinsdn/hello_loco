@@ -130,3 +130,43 @@ because this Loco version otherwise protects all scaffold actions by default.
 The generated response DTOs are retained instead of serializing entities
 as the tutorial snippet does. Note creation is kept on the model per the local Loco guide. The existing auth
 suite is reused unchanged.
+
+## Server-side frontend
+
+The existing app now includes Tera server-side rendering, using Loco's
+[API-only app setup](https://loco.rs/docs/how-to/render-views/).
+Run `cargo loco start`, then visit http://localhost:5150/.
+
+- `src/initializers/view_engine.rs` installs the Tera view engine.
+- `src/controllers/home.rs` serves the home page through `src/views/home.rs`.
+- `assets/views/` contains the base layout and home template.
+- `assets/static/` contains CSS and the static fallback page.
+- All environments serve static assets at `/static`; existing APIs stay at `/api`.
+
+The home page provides the server-side frontend foundation; its API links open
+JSON responses. Login forms are described below. A dashboard and per-user note
+ownership are not implemented. Deploy the `assets/` directory alongside the
+binary and `config/` because templates and static files are loaded from disk.
+
+## Login and mail template previews
+
+- `/login`: sign in using the existing `/api/auth/login` endpoint and display
+  the current user's name/email from `/api/auth/current`.
+- `/register`: submit account registration through the existing auth API.
+- `/mail-preview/welcome`, `/mail-preview/forgot`, `/mail-preview/magic_link`:
+  development/test-only previews of the actual `src/mailers/auth/*/*.t` sources.
+  Each shows the rendered subject, HTML in a sandboxed iframe, plain text, and
+  original source. Fixed sample values and nonfunctional example links are used;
+  previewing does not send mail or create users/tokens.
+
+The login page is an auth demonstration, not a persistent browser session or a
+dashboard: the JWT is used only in memory for the current-user request, never
+stored in localStorage/cookies or displayed. Refreshing requires signing in
+again. “Keluar” clears the displayed identity; it does not revoke an issued JWT.
+Development still uses the mail stub, so registering does not send real email.
+Mail preview data is independent from registration and contains no real tokens.
+
+`subject.t` defines the email subject, `html.t` the HTML body, and `text.t` its
+plain-text alternative. They are embedded at compile time, so changing these
+mailer templates requires rebuilding the Rust binary. Existing reset email
+links refer to `/reset`, whose browser flow is outside this login/preview task.

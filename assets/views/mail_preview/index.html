@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="preview-heading">
+  <p class="eyebrow">CONTOH EMAIL · DEVELOPMENT</p>
+  <h1>Begini isi emailnya.</h1>
+  <p class="description">File <code>.t</code> adalah template email. Nama dan tautan di dalamnya diisi ketika email dibuat.<br>Ini memakai data contoh Rani, bukan email yang dikirim ke pengguna.</p>
+  <nav class="preview-tabs" aria-label="Jenis email">
+    <a href="/mail-preview/welcome" {% if kind == "welcome" %}aria-current="page"{% endif %}>Sambutan &amp; verifikasi</a>
+    <a href="/mail-preview/forgot" {% if kind == "forgot" %}aria-current="page"{% endif %}>Reset kata sandi</a>
+    <a href="/mail-preview/magic_link" {% if kind == "magic_link" %}aria-current="page"{% endif %}>Magic link</a>
+  </nav>
+</section>
+<div class="email-summary"><span class="number">SUBJECT.T → JUDUL EMAIL</span><h2>{{ email.subject }}</h2></div>
+<section class="preview-grid">
+  <div><h2>HTML email <span class="number">HTML.T</span></h2><p class="description small">Versi yang ditampilkan aplikasi email.</p><iframe title="Pratinjau HTML email" srcdoc="{{ email.html }}" sandbox="" referrerpolicy="no-referrer"></iframe></div>
+  <div><h2>Teks biasa <span class="number">TEXT.T</span></h2><p class="description small">Alternatif untuk pembaca email tanpa HTML.</p><pre>{{ email.text }}</pre></div>
+</section>
+<section class="template-sources">
+  <h2>Dari template menjadi email</h2><p class="description">Bandingkan variabel pada sumber di bawah dengan hasil di atas. Tautannya hanya contoh dan tidak bisa dipakai masuk.</p>
+  <details><summary>Lihat sumber subject.t</summary><pre>{{ email.subject_source }}</pre></details>
+  <details><summary>Lihat sumber html.t</summary><pre>{{ email.html_source }}</pre></details>
+  <details><summary>Lihat sumber text.t</summary><pre>{{ email.text_source }}</pre></details>
+</section>
+{% endblock content %}

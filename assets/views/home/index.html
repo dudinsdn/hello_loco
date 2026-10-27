@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="intro">
+  <p class="eyebrow"><span class="dot"></span> FRONTEND SERVER-SIDE AKTIF</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">Satu tempat untuk mulai membangun<br class="desktop-break"> sesuatu yang berarti.</p>
+  <p class="description">Halaman ini dirender oleh server menggunakan Tera.<br class="desktop-break"> Fondasi sudah ada. Berikutnya, wujudkan ide Anda.</p>
+  <a class="button" href="https://loco.rs/docs/how-to/render-views/">Pelajari template <span aria-hidden="true">↗</span></a>
+</section>
+<section class="resources" aria-label="Jelajahi aplikasi">
+  <a class="resource" href="/api/notes"><span class="number">01 / CATATAN</span><h2>Mulai dari sebuah ide <span aria-hidden="true">↗</span></h2><p>Lihat data catatan melalui API.</p><span class="resource-link">Buka API catatan</span></a>
+  <a class="resource" href="/api/posts"><span class="number">02 / POSTINGAN</span><h2>Bagikan sebuah cerita <span aria-hidden="true">↗</span></h2><p>Lihat data postingan melalui API.</p><span class="resource-link">Buka API postingan</span></a>
+</section>
+{% if show_preview %}<p class="preview-entry"><a href="/mail-preview/welcome">Lihat contoh email dari template .t →</a></p>{% endif %}
+{% endblock content %}

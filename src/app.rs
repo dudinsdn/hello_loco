@@ -42,15 +42,27 @@ impl Hooks for App {
     }
 
     async fn initializers(_ctx: &AppContext) -> Result<Vec<Box<dyn Initializer>>> {
-        Ok(vec![])
+        Ok(vec![Box::new(
+            crate::initializers::view_engine::ViewEngineInitializer,
+        )])
     }
 
-    fn routes(_ctx: &AppContext) -> AppRoutes {
-        AppRoutes::with_default_routes() // controller routes below
+    fn routes(ctx: &AppContext) -> AppRoutes {
+        let routes = AppRoutes::with_default_routes() // controller routes below
+            .add_route(controllers::account::routes())
+            .add_route(controllers::home::routes())
             .add_route(controllers::notes::routes())
             .add_route(controllers::comments::routes())
             .add_route(controllers::posts::routes())
-            .add_route(controllers::auth::routes())
+            .add_route(controllers::auth::routes());
+        if matches!(
+            ctx.environment,
+            Environment::Development | Environment::Test
+        ) {
+            routes.add_route(controllers::mail_preview::routes())
+        } else {
+            routes
+        }
     }
     async fn connect_workers(ctx: &AppContext, queue: &Queue) -> Result<()> {
         queue
