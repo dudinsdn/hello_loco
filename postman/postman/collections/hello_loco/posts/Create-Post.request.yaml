@@ -1,0 +1,14 @@
+$kind: http-request
+name: Create Post
+method: POST
+url: "{{base_url}}/api/posts"
+order: 2000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "My First Post",
+      "content": "This is the content of my first post."
+    }

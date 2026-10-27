@@ -1,0 +1,4 @@
+$kind: collection
+description: |-
+  API collection for the hello_loco Loco.rs application.
+  Covers Auth (register, login, magic-link, password reset) and Posts (CRUD) endpoints.

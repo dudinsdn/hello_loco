@@ -1,0 +1,9 @@
+workspace:
+  id: 6bf144b1-cc75-43b4-b223-cb6072a91b7f
+cloudResources:
+  collections:
+    ../postman/collections/hello_loco: 19505039-e5c58c1c-ab3d-4408-a3c9-dd3e1e29324c
+  environments:
+    ../postman/environments/hello_loco.environment.yaml: 19505039-9390bfab-55c0-4234-9992-192ed3c6276a
+  globals:
+    ../postman/globals/workspace.globals.yaml: d46dc3c8-dc2a-42ea-8e48-e10fc461a67c

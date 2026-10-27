@@ -1,0 +1,14 @@
+$kind: http-request
+name: List Posts
+method: GET
+url: "{{base_url}}/api/posts"
+order: 1000
+queryParams:
+  - key: page
+    value: "1"
+    disabled: true
+    description: Page number (1-based)
+  - key: page_size
+    value: "10"
+    disabled: true
+    description: Number of items per page

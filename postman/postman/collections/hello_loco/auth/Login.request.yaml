@@ -1,0 +1,22 @@
+$kind: http-request
+method: POST
+url: "{{base_url}}/api/auth/login"
+order: 3000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com",
+      "password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json.token) {
+          pm.environment.set("token", json.token);
+          console.log("JWT token saved to collection variable 'token'");
+      }
+    language: text/javascript

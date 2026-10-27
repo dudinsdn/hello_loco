@@ -1,0 +1,9 @@
+$kind: http-request
+name: 'Verify Magic Link'
+method: GET
+url: '{{base_url}}/api/auth/magic-link/{{magic_link_token}}'
+order: 8000
+pathVariables:
+  - key: magic_link_token
+    value: ''
+    description: Magic link token received via email

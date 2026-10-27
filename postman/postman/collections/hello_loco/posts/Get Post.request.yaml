@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{base_url}}/api/posts/{{post_id}}"
+method: GET
+pathVariables:
+  - key: post_id
+    value: "1"
+    description: The numeric ID of the post
+order: 3974

@@ -1,0 +1,19 @@
+$kind: http-request
+name: 'Update Post'
+method: PUT
+url: '{{base_url}}/api/posts/{{post_id}}'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: post_id
+    value: '1'
+    description: The numeric ID of the post to update
+body:
+  type: json
+  content: |-
+    {
+      "title": "Updated Post Title",
+      "content": "Updated post content."
+    }

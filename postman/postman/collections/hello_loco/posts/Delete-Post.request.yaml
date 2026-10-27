@@ -1,0 +1,9 @@
+$kind: http-request
+name: 'Delete Post'
+method: DELETE
+url: '{{base_url}}/api/posts/{{post_id}}'
+order: 5000
+pathVariables:
+  - key: post_id
+    value: '1'
+    description: The numeric ID of the post to delete

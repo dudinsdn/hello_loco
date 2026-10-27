@@ -1,0 +1,4 @@
+$kind: collection
+name: Auth
+description: Authentication endpoints – register, verify, login, password reset, magic link, and current user.
+order: 1000

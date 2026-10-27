@@ -1,0 +1,14 @@
+name: hello_loco
+values:
+  - key: base_url
+    value: 'http://localhost:5150'
+  - key: token
+    value: ''
+  - key: verification_token
+    value: ''
+  - key: reset_token
+    value: ''
+  - key: magic_link_token
+    value: ''
+  - key: post_id
+    value: '1'

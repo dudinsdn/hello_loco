@@ -1,0 +1,14 @@
+$kind: http-request
+name: 'Request Magic Link'
+method: POST
+url: '{{base_url}}/api/auth/magic-link'
+order: 7000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com"
+    }
