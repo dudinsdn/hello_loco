@@ -84,3 +84,49 @@ cargo fmt --all
 cargo clippy --all-targets -- -D warnings
 cargo test
 ```
+
+## Authenticated app tutorial
+
+Continues [Build a Small Authenticated App](https://loco.rs/docs/tutorials/saas-with-auth/)
+in this existing project. Development email uses `mailer.stub: true`, so
+registration works without an SMTP catcher and no real email is sent.
+
+```sh
+cargo loco start
+```
+
+In another terminal:
+
+```sh
+curl -X POST localhost:5150/api/auth/register \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Loco user","email":"user@loco.rs","password":"12341234"}'
+curl -X POST localhost:5150/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"user@loco.rs","password":"12341234"}'
+# Copy the token from the login response:
+TOKEN='paste-login-token-here'
+curl localhost:5150/api/auth/current -H "Authorization: Bearer $TOKEN"
+# Without a token: 401
+curl -X POST localhost:5150/api/notes \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"secret","content":"shh"}'
+# With a valid token for an existing user: 201
+curl -X POST localhost:5150/api/notes \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"title":"secret","content":"shh"}'
+```
+
+This follows the tutorial's deliberately limited protection: only creating a
+note requires JWT authentication and a user lookup. Listing, reading, updating,
+and deleting notes remain public. Notes are not assigned to an owner or tenant;
+this is an authentication exercise, not private per-user storage. Login and
+note creation do not require a verified email. Existing posts/comments retain
+their previous behavior.
+
+The scaffold is generated with `--no-auth`, then JWT is added to `create`,
+because this Loco version otherwise protects all scaffold actions by default.
+The generated response DTOs are retained instead of serializing entities
+as the tutorial snippet does. Note creation is kept on the model per the local Loco guide. The existing auth
+suite is reused unchanged.

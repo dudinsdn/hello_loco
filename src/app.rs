@@ -47,6 +47,7 @@ impl Hooks for App {
 
     fn routes(_ctx: &AppContext) -> AppRoutes {
         AppRoutes::with_default_routes() // controller routes below
+            .add_route(controllers::notes::routes())
             .add_route(controllers::comments::routes())
             .add_route(controllers::posts::routes())
             .add_route(controllers::auth::routes())
@@ -67,6 +68,7 @@ impl Hooks for App {
         tasks.register(tasks::user_delete::UserDelete);
     }
     async fn truncate(ctx: &AppContext) -> Result<()> {
+        truncate_table(&ctx.db, crate::models::notes::Entity).await?;
         truncate_table(&ctx.db, crate::models::comments::Entity).await?;
         truncate_table(&ctx.db, crate::models::posts::Entity).await?;
         truncate_table(&ctx.db, users::Entity).await?;
